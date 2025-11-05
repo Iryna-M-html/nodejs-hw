@@ -4,10 +4,11 @@ import cors from 'cors';
 import pino from 'pino-http';
 import 'dotenv/config';
 import { connectMongoDB } from './db/connectMongoDB.js';
-import { Note } from './models/note.js';
+
 import helmet from 'helmet';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errrorHandler.js';
+import notesRoutes from './routes/notesRoutes';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -38,20 +39,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/notes', async (req, res) => {
-  const notes = await Note.find();
-  res.status(200).json(notes);
-});
-
-app.get('/notes/:noteId', async (req, res) => {
-  const { noteId } = req.params;
-  const note = await Note.findById(noteId);
-
-  if (!note) {
-    return res.status(404).json({ message: `Note not found` });
-  }
-  res.status(200).json({ message: `Retrieved note with ID: ${noteId}` });
-});
+app.use(notesRoutes);
 
 app.get('/test-error', () => {
   throw new Error('Simulated server error');
