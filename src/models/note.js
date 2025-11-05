@@ -1,9 +1,23 @@
 import mongoose from 'mongoose';
 const noteSchema = new mongoose.Schema(
   {
-    title: { type: String, reguired: true },
-    content: { type: String, reguired: true },
-    tag: { type: String, reguired: true },
+    title: { type: String, required: true, trim: true },
+    content: { type: String, trim: true, default: `` },
+    tag: {
+      type: String,
+      enum: [
+        'Personal',
+        'Meeting',
+        'Shopping',
+        'Ideas',
+        'Travel',
+        'Finance',
+        'Health',
+        'Important',
+        'Todo',
+      ],
+      default: 'Todo',
+    },
   },
   {
     timestamps: true,
@@ -11,11 +25,3 @@ const noteSchema = new mongoose.Schema(
 );
 
 export const Note = mongoose.model('Note', noteSchema);
-// {
-//   "_id": {
-//     "$oid": "690b373afada528db5e7eaea"
-//   },
-//   "title": "Buy groceries",
-//   "content": "Milk, eggs, bread, coffee",
-//   "tag": "Shopping"
-// }
