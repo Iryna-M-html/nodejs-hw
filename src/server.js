@@ -33,20 +33,8 @@ app.use(
   }),
 );
 
-app.get('/', (req, res) => {
-  res.status(200).json({
-    message: 'Hello Node.js',
-  });
-});
-
 app.use(notesRoutes);
-
-app.get('/test-error', () => {
-  throw new Error('Simulated server error');
-});
-
 app.use(notFoundHandler);
-
 app.use(errorHandler);
 
 await connectMongoDB();
