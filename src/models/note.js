@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
-const noteSchema = new Schema(
+import mongoose from 'mongoose';
+const noteSchema = new mongoose.Schema(
   {},
   {
     timestamps: true,

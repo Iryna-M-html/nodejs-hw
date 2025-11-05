@@ -4,11 +4,11 @@ import cors from 'cors';
 import pino from 'pino-http';
 import 'dotenv/config';
 import { connectMongoDB } from './db/connectMongoDB.js';
+import { Note } from './models/note.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
-// Middleware
 app.use(express.json());
 app.use(cors());
 app.use(
@@ -28,29 +28,35 @@ app.use(
   }),
 );
 
-// Решта коду
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'Hello Node.js',
+  });
+});
 
-// Middleware для парсингу JSON
-app.use(express.json());
+app.get('/notes', (req, res) => {
+  res.status(200).json({ message: 'Retrieved all notes' });
+});
 
-app.post('/users', (req, res) => {
-  console.log(req.body); // тепер тіло доступне як JS-об’єкт
-  res.status(201).json({ message: 'User created' });
+app.get('/notes/:noteId', (req, res) => {
+  const { noteId } = req.params;
+  res.status(200).json({ message: `Retrieved note with ID: ${noteId}` });
+});
+
+app.get('/test-error', () => {
+  throw new Error('Simulated server error');
 });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
 app.use((err, req, res, next) => {
-  console.error(err);
-
-  const isProd = process.env.NODE_ENV === 'production';
-
-  res.status(500).json({
-    message: isProd
-      ? 'Something went wrong. Please try again later.'
-      : err.message,
-  });
+  res.status(500).json({ message: err.message });
 });
 
 await connectMongoDB();
