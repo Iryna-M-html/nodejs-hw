@@ -7,6 +7,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import { Note } from './models/note.js';
 import helmet from 'helmet';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middleware/errrorHandler.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -58,9 +59,7 @@ app.get('/test-error', () => {
 
 app.use(notFoundHandler);
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+app.use(errorHandler);
 
 await connectMongoDB();
 
