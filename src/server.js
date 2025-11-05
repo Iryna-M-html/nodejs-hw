@@ -5,12 +5,15 @@ import pino from 'pino-http';
 import 'dotenv/config';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { Note } from './models/note.js';
+import helmet from 'helmet';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 app.use(express.json());
 app.use(cors());
+app.use(helmet());
 app.use(
   pino({
     level: 'info',
@@ -53,16 +56,14 @@ app.get('/test-error', () => {
   throw new Error('Simulated server error');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
+app.use(notFoundHandler);
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
 await connectMongoDB();
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
