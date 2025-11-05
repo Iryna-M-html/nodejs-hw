@@ -8,7 +8,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import helmet from 'helmet';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errrorHandler.js';
-import notesRoutes from './routes/notesRoutes';
+import notesRoutes from './routes/notesRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -34,7 +34,9 @@ app.use(
 );
 
 app.use(notesRoutes);
+
 app.use(notFoundHandler);
+
 app.use(errorHandler);
 
 await connectMongoDB();
