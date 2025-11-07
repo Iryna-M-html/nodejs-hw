@@ -7,7 +7,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 
 import helmet from 'helmet';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
-import { errorHandler } from './middleware/errrorHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
 import { logger } from './middleware/logger.js';
 
