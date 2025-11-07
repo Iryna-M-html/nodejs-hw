@@ -19,6 +19,9 @@ app.use(cors());
 app.use(helmet());
 app.use(logger);
 
+app.get('/', (req, res) => {
+  res.send('✅ API is running!');
+});
 app.use(notesRoutes);
 
 app.use(notFoundHandler);
