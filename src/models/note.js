@@ -6,6 +6,7 @@ const noteSchema = new mongoose.Schema(
     tag: {
       type: String,
       enum: [
+        'Work',
         'Personal',
         'Meeting',
         'Shopping',
