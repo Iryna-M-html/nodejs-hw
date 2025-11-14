@@ -1,6 +1,8 @@
-import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import { model } from 'mongoose';
 import { TAGS } from '../constants/tags.js';
-const noteSchema = new mongoose.Schema(
+
+const noteSchema = new Schema(
   {
     title: { type: String, required: true, trim: true },
     content: { type: String, trim: true, default: `` },
@@ -14,5 +16,11 @@ const noteSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
-
-export const Note = mongoose.model('Note', noteSchema);
+noteSchema.index(
+  {
+    title: 'text',
+    content: 'text',
+  },
+  { name: 'NoteTextIndex' },
+);
+export const Note = model('Note', noteSchema);
