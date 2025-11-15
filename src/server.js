@@ -25,9 +25,9 @@ app.get('/', (req, res) => {
 app.use(notesRoutes);
 
 app.use(notFoundHandler);
+app.use(errors());
 
 app.use(errorHandler);
-app.use(errors());
 
 await connectMongoDB();
 
