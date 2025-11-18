@@ -3,11 +3,8 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { User } from '../models/user.js';
-// src/controllers/authController.js
-
-// Новий імпорт
-import { createSession } from '../services/auth.js';
 import { Session } from '../models/session.js';
+import { createSession, setSessionCookies } from '../services/auth.js';
 
 export const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -23,9 +20,9 @@ export const registerUser = async (req, res, next) => {
     email,
     password: hashedPassword,
   });
-
-  // Створюємо нову сесію
   const newSession = await createSession(newUser._id);
+  // 2. Викликаємо, передаємо об'єкт відповіді та сесію
+  setSessionCookies(res, newSession);
 
   res.status(201).json(newUser);
 };
@@ -45,9 +42,9 @@ export const loginUser = async (req, res, next) => {
 
   // Видаляємо стару сесію користувача
   await Session.deleteOne({ userId: user._id });
-
-  // Створюємо нову сесію
   const newSession = await createSession(user._id);
+  // 3. Викликаємо, передаємо об'єкт відповіді та сесію
+  setSessionCookies(res, newSession);
 
   res.status(200).json(user);
 };
