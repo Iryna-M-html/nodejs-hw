@@ -24,3 +24,22 @@ export const registerUser = async (req, res, next) => {
   // Відправляємо дані користувача (без пароля) у відповіді
   res.status(201).json(newUser);
 };
+// src/controllers/authController.js
+
+export const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // Перевіряємо чи користувач з такою поштою існує
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(createHttpError(401, 'Invalid credentials'));
+  }
+
+  // Порівнюємо хеші паролів
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword) {
+    return next(createHttpError(401, 'Invalid credentials'));
+  }
+
+  res.status(200).json(user);
+};
