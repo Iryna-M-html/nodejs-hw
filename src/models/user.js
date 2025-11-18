@@ -29,7 +29,6 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-// Перевизначаємо метод toJSON
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
