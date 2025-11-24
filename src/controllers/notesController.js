@@ -4,8 +4,8 @@ import createHttpError from 'http-errors';
 export const getAllNotes = async (req, res) => {
   const { page = 1, perPage = 15, search, tag } = req.query;
   const skip = (page - 1) * perPage;
-  const notesQuery = Note.find();
 
+  const notesQuery = notes.find({ userId: req.user._id });
   if (tag) {
     notesQuery.where('tag').equals(tag);
   }
